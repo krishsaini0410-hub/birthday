@@ -1,0 +1,374 @@
+[tannu_birthday (3).html](https://github.com/user-attachments/files/28668380/tannu_birthday.3.html)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Tannu 🎂</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  body { font-family: 'Quicksand', sans-serif; overflow-x: hidden; }
+
+  .slide {
+    min-height: 100vh; width: 100%;
+    scroll-snap-align: start;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    position: relative; overflow: hidden; padding: 40px 20px;
+  }
+
+  .slide-1 { background: linear-gradient(135deg,#fce4ec 0%,#f8bbd0 40%,#ffd6e0 100%); }
+  .slide-2 { background: linear-gradient(135deg,#ede7f6 0%,#d1c4e9 40%,#e8d5f5 100%); }
+  .slide-3 { background: linear-gradient(135deg,#fff8e1 0%,#ffecb3 40%,#ffe0b2 100%); }
+  .slide-4 { background: linear-gradient(135deg,#e0f7fa 0%,#b2ebf2 40%,#dcedc8 100%); }
+
+  .bubble { position:absolute; border-radius:50%; opacity:.18; animation:float 6s ease-in-out infinite; }
+  @keyframes float { 0%,100%{transform:translateY(0) scale(1);} 50%{transform:translateY(-22px) scale(1.04);} }
+
+  .nav-dots { position:fixed; right:24px; top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:10px; z-index:100; }
+  .dot { width:10px; height:10px; border-radius:50%; background:rgba(0,0,0,0.2); cursor:pointer; transition:background .3s,transform .3s; border:none; outline:none; }
+  .dot.active { background:rgba(0,0,0,0.55); transform:scale(1.3); }
+
+  /* ── ENTER SCREEN ── */
+  #enter-screen {
+    position:fixed; inset:0;
+    background:linear-gradient(135deg,#fce4ec,#f8bbd0,#ffd6e0);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    z-index:999; transition:opacity 0.8s ease;
+  }
+  #enter-screen h1 { font-family:'Playfair Display',serif; font-size:clamp(32px,8vw,58px); color:#5a2a2a; margin-bottom:12px; text-align:center; }
+  #enter-screen p  { font-size:16px; color:rgba(90,40,40,0.6); margin-bottom:40px; letter-spacing:1px; }
+
+  #ready-btn {
+    font-family:'Quicksand',sans-serif; font-size:22px; font-weight:700;
+    padding:18px 56px; border-radius:50px; border:none; cursor:pointer;
+    background:linear-gradient(135deg,#f48fb1,#e91e63); color:#fff;
+    box-shadow:0 8px 30px rgba(233,30,99,0.4);
+    animation:shake 0.55s ease-in-out infinite, glow 1.5s ease-in-out infinite alternate;
+    letter-spacing:1px; position:relative; overflow:visible;
+  }
+  @keyframes shake {
+    0%,100%{transform:rotate(-4deg) scale(1.06);}
+    25%{transform:rotate(4deg) scale(1.1);}
+    50%{transform:rotate(-3deg) scale(1.06);}
+    75%{transform:rotate(3deg) scale(1.1);}
+  }
+  @keyframes glow {
+    from{box-shadow:0 8px 30px rgba(233,30,99,0.4);}
+    to{box-shadow:0 8px 60px rgba(233,30,99,0.85),0 0 30px rgba(233,30,99,0.5);}
+  }
+
+  /* ── BURST CANVAS ── */
+  #burst-canvas { position:fixed; inset:0; z-index:1000; pointer-events:none; display:none; }
+
+  /* ── SLIDE 1 photo — bigger ── */
+  /* slide 1 split layout */
+  .slide-1 { flex-direction:row !important; align-items:stretch !important; padding:0 !important; }
+  .slide1-photo {
+    width:45%; min-height:100vh; flex-shrink:0;
+    overflow:hidden; position:relative;
+  }
+  .slide1-photo img {
+    width:100%; height:100%;
+    object-fit:cover; object-position:center top; display:block;
+  }
+  .slide1-text {
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    padding:40px 32px; text-align:center;
+  }
+
+  /* ── SLIDE 2 layout ── */
+  .slide2-layout {
+    width:100%; max-width:640px;
+    position:relative; min-height:88vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+  }
+  .corner-photo {
+    position:absolute;
+    width:200px; height:240px;
+    border-radius:20px;
+    overflow:hidden;
+    border:4px solid rgba(255,255,255,0.85);
+    box-shadow:0 12px 36px rgba(0,0,0,0.18);
+  }
+  .corner-photo img { width:100%; height:100%; object-fit:cover; object-position:top; }
+  .corner-tl { top:10px; left:5px; }
+  .corner-tr { top:10px; right:5px; }
+
+  .bottom-photo {
+    width:200px; height:200px; border-radius:20px;
+    overflow:hidden;
+    border:5px solid rgba(255,255,255,0.85);
+    box-shadow:0 12px 36px rgba(0,0,0,0.16);
+    margin-top:30px;
+  }
+  .bottom-photo img { width:100%; height:100%; object-fit:cover; object-position:top; }
+
+  .center-msg { text-align:center; padding:0 20px; animation:fadeUp 1s ease both; }
+  .center-msg .msg-text {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(24px,5vw,38px); font-style:italic;
+    color:#3a1a5a; line-height:1.4;
+    text-shadow:0 2px 8px rgba(180,100,220,0.15);
+  }
+
+  /* ── SLIDE 3 — 2 horizontal photos ── */
+  .horiz-photos {
+    display:flex; gap:18px; justify-content:center;
+    margin-bottom:28px; flex-wrap:wrap;
+  }
+  .horiz-frame {
+    width:260px; height:185px;
+    border-radius:20px; overflow:hidden;
+    border:4px solid rgba(255,255,255,0.75);
+    box-shadow:0 10px 30px rgba(0,0,0,0.13);
+    transition:transform 0.3s;
+  }
+  .horiz-frame:hover { transform:scale(1.03) rotate(-1deg); }
+  .horiz-frame img { width:100%; height:100%; object-fit:cover; }
+
+  /* ── Common text ── */
+  .slide-title { font-family:'Playfair Display',serif; font-size:clamp(36px,7vw,58px); font-weight:700; color:#3a2a2a; text-align:center; line-height:1.1; margin-bottom:14px; animation:fadeUp 0.9s ease both; }
+  .slide-sub { font-size:clamp(14px,3vw,17px); color:rgba(50,30,30,0.65); text-align:center; max-width:400px; line-height:1.7; animation:fadeUp 0.9s 0.15s ease both; }
+  .badge { display:inline-block; font-size:13px; font-weight:600; letter-spacing:2px; text-transform:uppercase; padding:6px 18px; border-radius:30px; background:rgba(255,255,255,0.55); color:rgba(80,40,40,0.7); margin-bottom:18px; border:1px solid rgba(255,255,255,0.8); animation:fadeUp 0.9s ease both; }
+  .hearts { display:flex; gap:8px; margin-top:22px; font-size:20px; animation:fadeUp 0.9s 0.3s ease both; }
+  .heart { animation:pulse 1.4s ease-in-out infinite; }
+  .heart:nth-child(2){animation-delay:.2s;} .heart:nth-child(3){animation-delay:.4s;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.3);}}
+
+  .confetti-wrap{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;overflow:hidden;}
+  .conf{position:absolute;width:8px;height:8px;border-radius:2px;opacity:.55;animation:fallDown linear infinite;}
+  @keyframes fallDown{0%{transform:translateY(-40px) rotate(0deg);opacity:.7;}100%{transform:translateY(110vh) rotate(720deg);opacity:0;}}
+
+  .scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:rgba(0,0,0,0.3);display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .scroll-arrow{width:18px;height:18px;border-right:2px solid rgba(0,0,0,0.25);border-bottom:2px solid rgba(0,0,0,0.25);transform:rotate(45deg);animation:bounce 1.4s infinite;}
+  @keyframes bounce{0%,100%{transform:rotate(45deg) translateY(0);}50%{transform:rotate(45deg) translateY(5px);}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+</style>
+</head>
+<body>
+
+<canvas id="burst-canvas"></canvas>
+
+<!-- ENTER SCREEN -->
+<div id="enter-screen">
+  <h1>🎂 Tannu's<br>Birthday!</h1>
+  <p>A special surprise is waiting…</p>
+  <button id="ready-btn" onclick="burstAndEnter(this)">🎉 Ready!</button>
+</div>
+
+<nav class="nav-dots">
+  <button class="dot active" onclick="goTo(0)"></button>
+  <button class="dot" onclick="goTo(1)"></button>
+  <button class="dot" onclick="goTo(2)"></button>
+  <button class="dot" onclick="goTo(3)"></button>
+</nav>
+
+<!-- SLIDE 1 -->
+<section class="slide slide-1" id="s0">
+  <div class="confetti-wrap" id="cf0"></div>
+  <div class="bubble" style="width:200px;height:200px;background:#f48fb1;top:-50px;left:46%;animation-delay:0s;"></div>
+  <div class="bubble" style="width:130px;height:130px;background:#f06292;bottom:80px;right:5%;animation-delay:1.5s;"></div>
+
+  <!-- Left: full height photo -->
+  <div class="slide1-photo">
+    <img src="img4.jpg" alt="Tannu">
+  </div>
+
+  <!-- Right: text -->
+  <div class="slide1-text">
+    <div class="badge">✨ Special Day ✨</div>
+    <div class="slide-title">Happy<br>Birthday<br><em>Tannu!</em></div>
+    <div class="slide-sub">Today is all about you — your smile, your laughter, your beautiful heart. Wishing you the most magical birthday ever! 🎂</div>
+    <div class="hearts"><span class="heart">🌸</span><span class="heart">💖</span><span class="heart">🌸</span></div>
+    <div class="scroll-cue" style="position:relative;bottom:auto;left:auto;transform:none;margin-top:28px;">scroll <div class="scroll-arrow"></div></div>
+  </div>
+</section>
+
+<!-- SLIDE 2 -->
+<section class="slide slide-2" id="s1">
+  <div class="confetti-wrap" id="cf1"></div>
+  <div class="bubble" style="width:200px;height:200px;background:#ce93d8;top:-60px;right:-60px;animation-delay:0.5s;"></div>
+  <div class="bubble" style="width:90px;height:90px;background:#ab47bc;bottom:60px;left:-20px;animation-delay:2s;"></div>
+
+  <div class="slide2-layout">
+    <div class="corner-photo corner-tl"><img src="img2.jpg" alt="Tannu"></div>
+    <div class="corner-photo corner-tr"><img src="img3.jpg" alt="Tannu"></div>
+
+    <div class="center-msg" style="margin-top:260px;">
+      <div class="msg-text">"Happy Birthday to my<br>precious beautiful girl"</div>
+      <div class="hearts" style="justify-content:center;">
+        <span class="heart">💜</span><span class="heart">🦋</span><span class="heart">💜</span>
+      </div>
+    </div>
+
+    <div class="bottom-photo"><img src="img1.jpg" alt="Tannu"></div>
+  </div>
+  <div class="scroll-cue">scroll <div class="scroll-arrow"></div></div>
+</section>
+
+<!-- SLIDE 3 — 2 horizontal photos -->
+<section class="slide slide-3" id="s2">
+  <div class="confetti-wrap" id="cf2"></div>
+  <div class="bubble" style="width:160px;height:160px;background:#ffcc02;top:-50px;left:-40px;animation-delay:1s;"></div>
+  <div class="bubble" style="width:100px;height:100px;background:#ff9800;bottom:40px;right:-20px;animation-delay:2.5s;"></div>
+
+  <div class="badge">🌼 Sweet Memories 🌼</div>
+
+  <div class="horiz-photos">
+    <div class="horiz-frame"><img src="img5.jpg" alt="Memory"></div>
+    <div class="horiz-frame"><img src="img6.jpg" alt="Memory"></div>
+  </div>
+
+  <div class="slide-title">Golden<br><em>Moments</em></div>
+  <div class="slide-sub">Every picture tells a story. Every moment with you is a treasure worth keeping forever. 🌟</div>
+  <div class="scroll-cue">scroll <div class="scroll-arrow"></div></div>
+</section>
+
+<!-- SLIDE 4 -->
+<section class="slide slide-4" id="s3">
+  <div class="confetti-wrap" id="cf3"></div>
+  <div class="bubble" style="width:150px;height:150px;background:#80deea;top:-40px;right:-40px;animation-delay:0.8s;"></div>
+  <div class="bubble" style="width:110px;height:110px;background:#a5d6a7;bottom:50px;left:-20px;animation-delay:2.2s;"></div>
+
+  <div class="badge">🎉 Celebrate! 🎉</div>
+  <div style="font-size:70px;margin-bottom:16px;animation:fadeUp 0.8s ease both;">🎂</div>
+  <div class="slide-title">Here's to<br><em>You, Tannu!</em></div>
+  <div class="slide-sub">Another year of adventures, laughter, and beautiful memories ahead. You deserve all the happiness in the world. Stay blessed, stay shining! ✨</div>
+  <div class="hearts" style="margin-top:24px;gap:12px;">
+    <span class="heart" style="font-size:26px;">🌿</span>
+    <span class="heart" style="font-size:26px;">💚</span>
+    <span class="heart" style="font-size:26px;">🌿</span>
+  </div>
+  <div style="margin-top:32px;font-family:'Playfair Display',serif;font-style:italic;font-size:13px;color:rgba(0,0,0,0.35);letter-spacing:1px;">Made with 💖 just for you</div>
+</section>
+
+<script>
+/* ── BURST effect ── */
+function burstAndEnter(btn) {
+  const canvas = document.getElementById('burst-canvas');
+  canvas.style.display = 'block';
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  const rect = btn.getBoundingClientRect();
+  const cx = rect.left + rect.width/2;
+  const cy = rect.top  + rect.height/2;
+
+  const particles = [];
+  const colors = ['#f48fb1','#e91e63','#ff80ab','#ffcc02','#ce93d8','#80deea','#fff','#ffb74d','#a5d6a7'];
+  const emojis = ['🎉','✨','🌸','💖','🎊','⭐','💫','🎈'];
+
+  for (let i=0; i<120; i++) {
+    const angle = Math.random()*Math.PI*2;
+    const speed = 4 + Math.random()*14;
+    particles.push({
+      x: cx, y: cy,
+      vx: Math.cos(angle)*speed,
+      vy: Math.sin(angle)*speed - Math.random()*6,
+      size: 4 + Math.random()*10,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      emoji: Math.random()<0.25 ? emojis[Math.floor(Math.random()*emojis.length)] : null,
+      alpha: 1,
+      gravity: 0.3 + Math.random()*0.2,
+      rot: Math.random()*Math.PI*2,
+      rotSpeed: (Math.random()-0.5)*0.2
+    });
+  }
+
+  /* sparkle rings */
+  const rings = [{r:0,alpha:1},{r:0,alpha:0.7},{r:0,alpha:0.4}];
+
+  let frame = 0;
+  function animate() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    /* rings */
+    rings.forEach((ring,i) => {
+      ring.r += 8 + i*3;
+      ring.alpha -= 0.025;
+      if(ring.alpha>0){
+        ctx.beginPath();
+        ctx.arc(cx,cy,ring.r,0,Math.PI*2);
+        ctx.strokeStyle = `rgba(233,30,99,${ring.alpha})`;
+        ctx.lineWidth = 3;
+        ctx.stroke();
+      }
+    });
+
+    /* particles */
+    particles.forEach(p => {
+      p.x += p.vx; p.y += p.vy;
+      p.vy += p.gravity;
+      p.alpha -= 0.016;
+      p.rot += p.rotSpeed;
+      if(p.alpha<=0) return;
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x,p.y);
+      ctx.rotate(p.rot);
+      if(p.emoji){
+        ctx.font = `${p.size*2}px serif`;
+        ctx.fillText(p.emoji,-p.size,-p.size);
+      } else {
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.rect(-p.size/2,-p.size/2,p.size,p.size);
+        ctx.fill();
+      }
+      ctx.restore();
+    });
+
+    frame++;
+    if(frame < 90) requestAnimationFrame(animate);
+    else {
+      canvas.style.display='none';
+      const s = document.getElementById('enter-screen');
+      s.style.opacity='0';
+      setTimeout(()=>s.style.display='none',800);
+    }
+  }
+  animate();
+}
+
+/* ── Nav ── */
+const slides = document.querySelectorAll('.slide');
+const dots   = document.querySelectorAll('.dot');
+function goTo(i){ slides[i].scrollIntoView({behavior:'smooth'}); }
+
+new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      const i=[...slides].indexOf(e.target);
+      dots.forEach(d=>d.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+  });
+},{threshold:0.5}).observe && slides.forEach(s=>
+  new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){
+      const i=[...slides].indexOf(s);
+      dots.forEach(d=>d.classList.remove('active'));
+      dots[i].classList.add('active');
+    }
+  },{threshold:0.5}).observe(s)
+);
+
+/* ── Confetti ── */
+const colors=['#f48fb1','#ce93d8','#ffcc02','#80deea','#a5d6a7','#f06292','#ab47bc','#ff9800'];
+function makeConfetti(id,n=20){
+  const c=document.getElementById(id);
+  for(let i=0;i<n;i++){
+    const d=document.createElement('div');
+    d.className='conf';
+    d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*30-20}%;background:${colors[Math.floor(Math.random()*colors.length)]};width:${5+Math.random()*8}px;height:${5+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${3+Math.random()*5}s;animation-delay:${Math.random()*4}s;`;
+    c.appendChild(d);
+  }
+}
+['cf0','cf1','cf2','cf3'].forEach(id=>makeConfetti(id));
+</script>
+</body>
+</html>
